@@ -4,3 +4,6 @@ export const formatterMoney = new Intl.NumberFormat("de-DE", {
   currency: "VND",
   minimumFractionDigits: 0
 });
+
+export const customFormatMoney = value =>
+  formatterMoney.format(value).replace("VND", "ƒ ");

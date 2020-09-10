@@ -6,7 +6,8 @@ import {
   Row,
   Col,
   Button,
-  Form
+  Form,
+  Modal
 } from "react-bootstrap";
 import { fadeInDown } from "react-animations";
 import styled, { keyframes } from "styled-components";
@@ -15,7 +16,7 @@ import themes from "./../commons/variables";
 import { formatterMoney, formatter } from "../commons/function";
 import { CardCustom } from "../components";
 
-export default function Result() {
+export default function Result({ showModal, onHide, ...other }) {
   const [open, setOpen] = React.useState(false);
   const [openContact, setOpenContact] = React.useState(false);
   const [openTrial, setOpenTrial] = React.useState(false);
@@ -282,135 +283,158 @@ export default function Result() {
   );
 
   return (
-    <Container>
-      <Row>
-        <Col md={12}>
-          <CardCustom>
-            <Card>
-              <Card.Header>
-                <Box color={themes.colors.orange} fontSize={5}>
-                  Result
-                </Box>
-              </Card.Header>
-              <Card.Body>
-                <Box fontSize={3} mb={2}>
-                  Tổng chi phí khi sử dụng nền tảng giao tiếp thông thường
-                </Box>
-                <Box fontSize={6} fontWeight="bold" mb={2}>
-                  {formatter.format(100000000)}
-                  <Box as="span" ml={1}>
-                    VND
-                  </Box>
-                </Box>
-                <ProgressBar now={100} animated variant="warning" />
-              </Card.Body>
-            </Card>
-          </CardCustom>
-          <Box mb={3}>
-            <CardCustom>
-              <Card>
-                <Card.Header>
-                  <Box color={themes.colors.orange} fontSize={5}>
-                    Result
-                  </Box>
-                </Card.Header>
-                <Card.Body>
-                  <Box fontSize={3} mb={2}>
-                    Tổng chi phí tiết kiệm được khi sử dụng nền tảng giao tiếp
-                    Chatwork
-                  </Box>
-
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
+    <Modal show={showModal} onHide={onHide} size="xl" centered>
+      <Modal.Header
+        closeButton
+        style={{ backgroundColor: themes.colors.orange, color: "#fff" }}
+      >
+        <Modal.Title>RESULTS</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Container>
+          <Row>
+            <Col md={12}>
+              <CardCustom>
+                <Card>
+                  <Card.Body>
+                    <Box fontSize={3} mb={2}>
+                      Tổng chi phí khi sử dụng nền tảng giao tiếp thông thường
+                    </Box>
                     <Box fontSize={6} fontWeight="bold" mb={2}>
                       {formatter.format(100000000)}
                       <Box as="span" ml={1}>
                         VND
                       </Box>
                     </Box>
-                    <Box
-                      as="a"
-                      color={themes.colors.orange}
-                      fontWeight={500}
-                      onClick={showEmail}
-                    >
-                      Email my results
-                    </Box>
-                  </Box>
-                  <ProgressBar now={100} animated variant="warning" />
-                  <Box my={3}>
-                    <Box
-                      width={0.7}
-                      margin="auto"
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      <Box>
-                        Chi phí tiết kiệm được cho năng suất bị gián đoạn:
+                    <ProgressBar now={100} animated variant="warning" />
+                  </Card.Body>
+                </Card>
+              </CardCustom>
+              <Box mb={3}>
+                <CardCustom>
+                  <Card>
+                    <Card.Body>
+                      <Box fontSize={3} mb={2}>
+                        Tổng chi phí tiết kiệm được khi sử dụng nền tảng giao
+                        tiếp Chatwork
                       </Box>
-                      <Box fontWeight="bold">
-                        {formatterMoney.format(50000000)}
-                      </Box>
-                    </Box>
-                    <Box
-                      width={0.7}
-                      margin="auto"
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      <Box>
-                        Chi phí tiết kiệm được cho các cuộc họp không hiệu quả:
-                      </Box>
-                      <Box fontWeight="bold">
-                        {formatterMoney.format(50000000)}
-                      </Box>
-                    </Box>
-                  </Box>
-                  <Box textAlign="center" mb={3}>
-                    Trải nghiệm Chatwork Entẻprise Ngay!
-                  </Box>
-                  <Box display="flex" justifyContent="center">
-                    <Box width={{ sm: "auto", md: "150px" }}>
-                      <Button
-                        block
-                        style={{
-                          backgroundColor: themes.colors.orange,
-                          border: "none",
-                          height: "48px"
-                        }}
-                        onClick={showTrial}
+
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
                       >
-                        TRIAL
-                      </Button>
-                    </Box>
-                    <Box mr={2} />
-                    <Box width={{ sm: "auto", md: "150px" }}>
-                      <Button
-                        block
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "1px solid ",
-                          height: "48px",
-                          color: themes.colors.orange
-                        }}
-                        onClick={showContactUs}
-                      >
-                        CONTACT US
-                      </Button>
-                    </Box>
-                  </Box>
-                </Card.Body>
-              </Card>
-            </CardCustom>
-          </Box>
-          {renderCardEmail}
-          {renderCardContact}
-          {renderCardTrial}
-        </Col>
-      </Row>
-    </Container>
+                        <Box fontSize={6} fontWeight="bold" mb={2}>
+                          {formatter.format(100000000)}
+                          <Box as="span" ml={1}>
+                            VND
+                          </Box>
+                        </Box>
+                        <Box
+                          as="a"
+                          color={themes.colors.orange}
+                          fontWeight={500}
+                          onClick={showEmail}
+                        >
+                          Email my results
+                        </Box>
+                      </Box>
+                      <ProgressBar now={100} animated variant="warning" />
+                      <Box my={3}>
+                        <Box
+                          display="flex"
+                          fontSize={4}
+                          mb={3}
+                          flex={1}
+                          width={0.75}
+                          mx="auto"
+                        >
+                          <Box
+                            flex={0.5}
+                            display="inline-block"
+                            textAlign="right"
+                          >
+                            Chi phí tiết kiệm được cho năng suất bị gián đoạn:
+                          </Box>
+                          <Box width="30px" />
+
+                          <Box flex={0.5} fontWeight="bold" fontSize={5}>
+                            {formatter.format(50000000)}
+                            <Box as="span" ml={1}>
+                              VND
+                            </Box>
+                          </Box>
+                        </Box>
+
+                        <Box
+                          display="flex"
+                          fontSize={4}
+                          mb={3}
+                          flex={1}
+                          width={0.75}
+                          mx="auto"
+                        >
+                          <Box
+                            flex={0.5}
+                            display="inline-block"
+                            textAlign="right"
+                          >
+                            Chi phí tiết kiệm được cho các cuộc họp không hiệu
+                            quả:
+                          </Box>
+                          <Box width="30px" />
+                          <Box flex={0.5} fontWeight="bold" fontSize={5}>
+                            {formatter.format(50000000)}
+                            <Box as="span" ml={1}>
+                              VND
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                      <Box textAlign="center" mb={3} fontSize={5}>
+                        Trải nghiệm Chatwork Entẻprise Ngay!
+                      </Box>
+                      <Box display="flex" justifyContent="center">
+                        <Box width={{ sm: "auto", md: "150px" }}>
+                          <Button
+                            block
+                            style={{
+                              backgroundColor: themes.colors.orange,
+                              border: "none",
+                              height: "48px"
+                            }}
+                            onClick={showTrial}
+                          >
+                            TRIAL
+                          </Button>
+                        </Box>
+                        <Box mr={2} />
+                        <Box width={{ sm: "auto", md: "150px" }}>
+                          <Button
+                            block
+                            style={{
+                              backgroundColor: "transparent",
+                              border: "1px solid ",
+                              height: "48px",
+                              color: themes.colors.orange
+                            }}
+                            onClick={showContactUs}
+                          >
+                            CONTACT US
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Card.Body>
+                  </Card>
+                </CardCustom>
+              </Box>
+              {renderCardEmail}
+              {renderCardContact}
+              {renderCardTrial}
+            </Col>
+          </Row>
+        </Container>
+      </Modal.Body>
+    </Modal>
   );
 }
