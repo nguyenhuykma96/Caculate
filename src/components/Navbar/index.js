@@ -4,7 +4,7 @@ import { Box } from "@xstyled/styled-components";
 
 const NavbarComponent = () => {
   return (
-    <Box mb={5}>
+    <Box mb={1}>
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="/">
           <Box height="100px" width="100px">
