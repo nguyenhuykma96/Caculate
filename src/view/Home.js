@@ -354,6 +354,36 @@ export default function Home() {
                     </Accordion.Collapse>
                   </Card>
                 </CardCustom>
+
+                <CardCustom
+                  backgroundColor="#FAFAFA"
+                  position="absolute"
+                  top={0}
+                  left="102%"
+                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
+                  width="230px"
+                  maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
+                  py={3}
+                  px={2}
+                  opacity={openText.isOpen && openText.eventKey === 0 ? 1 : 0}
+                >
+                  <Box>
+                    <Box color={themes.colors.orange} fontSize={3}>
+                      Tiền công trung bình mỗi giờ:
+                    </Box>
+                    <Box fontSize={2}>
+                      Dựa trên trung bình mỗi tuần làm việc{" "}
+                      <Box as="span" fontWeight="bold">
+                        40h
+                      </Box>{" "}
+                      và{" "}
+                      <Box as="span" fontWeight="bold">
+                        4
+                      </Box>{" "}
+                      tuần/tháng
+                    </Box>
+                  </Box>
+                </CardCustom>
               </Box>
 
               <Box position="relative">
@@ -876,6 +906,53 @@ export default function Home() {
                     </Accordion.Collapse>
                   </Card>
                 </CardCustom>
+
+                <CardCustom
+                  backgroundColor="#FAFAFA"
+                  position="absolute"
+                  top={0}
+                  left="102%"
+                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
+                  width="230px"
+                  maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
+                  py={3}
+                  px={2}
+                  opacity={openText.isOpen && openText.eventKey === 1 ? 1 : 0}
+                  transition="opacity 0.5s"
+                  css={`
+                    transition-delay: 1s;
+                  `}
+                >
+                  <Box>
+                    <Box fontSize={2}>
+                      <Box>
+                        <Box as="span" fontWeight="bold">
+                          Thời gian khôi phục "gián đoạn":
+                        </Box>
+                        Nghiên cứu cho thấy rằng nhân viên sẽ mất trung bình 64
+                        giây để trở lại làm việc bình thường như trước khi họ bị
+                        gián đoạn bởi notification hay email.
+                      </Box>
+                      <Box>
+                        <Box as="span" fontWeight="bold">
+                          Tỷ lệ phân tâm:
+                        </Box>
+                        Nghiên cứu cho thấy rằng 70% nhân viên sẽ xem/phản hồi
+                        các tin nhắn trong trung bình 64 giây cho dù chúng có
+                        quan trọng hay không. Họ bị phân tâm khỏi việc mình đang
+                        làm.
+                      </Box>
+                      <Box>
+                        <Box as="span" fontWeight="bold">
+                          Tổng chi phí gián đoạn mỗi năm:
+                        </Box>
+                        Đây là chi phí mà những tác nhân gián đoạn gây ra như
+                        kiểm tra emails, lướt group chat tìm tin, kiểm tra tin
+                        nhắn để phản hồi
+                      </Box>
+                    </Box>
+                  </Box>
+                </CardCustom>
               </Box>
 
               <Box position="relative">
@@ -1193,6 +1270,30 @@ export default function Home() {
                       </Card.Body>
                     </Accordion.Collapse>
                   </Card>
+                </CardCustom>
+
+                <CardCustom
+                  backgroundColor="#FAFAFA"
+                  position="absolute"
+                  top={0}
+                  left="102%"
+                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
+                  width="230px"
+                  maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
+                  py={3}
+                  px={2}
+                  opacity={openText.isOpen && openText.eventKey === 2 ? 1 : 0}
+                >
+                  <Box>
+                    <Box color={themes.colors.orange} fontSize={3}>
+                      Tổng chi phí họp mỗi năm:
+                    </Box>
+                    <Box fontSize={2}>
+                      Đây là chi phí mà trung bình dành cho các cuộc họp nội bộ
+                      diễn ra dựa vào chi phí trung bình tiền lương lao động mỗi
+                      giờ của nhân viên
+                    </Box>
+                  </Box>
                 </CardCustom>
               </Box>
             </Accordion>

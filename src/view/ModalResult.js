@@ -392,7 +392,7 @@ export default function Result({ showModal, onHide, ...other }) {
                         </Box>
                       </Box>
                       <Box textAlign="center" mb={3} fontSize={5}>
-                        Trải nghiệm Chatwork Entẻprise Ngay!
+                        Trải nghiệm Chatwork Enterprise Ngay!
                       </Box>
                       <Box display="flex" justifyContent="center">
                         <Box width={{ sm: "auto", md: "150px" }}>
