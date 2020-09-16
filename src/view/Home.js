@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Accordion, Card, Button, Container, Row, Col } from "react-bootstrap";
+import {
+  Accordion,
+  Card,
+  Button,
+  Container,
+  Row,
+  Col,
+  Form
+} from "react-bootstrap";
 import { ArrowClockwise, Question } from "react-bootstrap-icons";
 import { Box } from "@xstyled/styled-components";
 import themes from "../commons/variables";
@@ -15,8 +23,8 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
   const [totalEmployee, setTotalEmployee] = useState({
     min: 1,
-    max: 100000,
-    value: 10000
+    max: 1000,
+    value: 100
   });
   const [salary, setSalary] = useState({
     min: 5000000,
@@ -77,7 +85,7 @@ export default function Home() {
   const caculateMeeting = a1.value * b1.value * c1.value * z * 48;
   const saveMoney = caculateMeeting * 0.5 - caculateCW;
 
-  const StyleInput = styled(Box)`
+  const StyleInput = styled(Form.Control)`
     max-width: 100px;
     font-weight: bold;
     padding: 4px 4px;
@@ -120,8 +128,8 @@ export default function Home() {
   const handleResetValue = () => {
     setTotalEmployee({
       min: 1,
-      max: 100000,
-      value: 10000
+      max: 1000,
+      value: 100
     });
     setSalary({
       min: 5000000,
@@ -170,7 +178,7 @@ export default function Home() {
     });
   };
 
-  function CustomToggle({ children, eventKey, callback }) {
+  function CustomToggle({ children, eventKey }) {
     const decoratedOnClick = useAccordionToggle(eventKey, () => {
       if (+eventKey === openText.eventKey) {
         setOpenText({
@@ -228,9 +236,7 @@ export default function Home() {
               <Box position="relative">
                 <CardCustom>
                   <Card>
-                    <CustomToggle eventKey="0" callback>
-                      THÔNG TIN CÔNG TY
-                    </CustomToggle>
+                    <CustomToggle eventKey="0">THÔNG TIN CÔNG TY</CustomToggle>
                     <Accordion.Collapse eventKey="0">
                       <Card.Body>
                         <Box fontSize={5} fontWeight={500} mb={3}>
@@ -242,16 +248,21 @@ export default function Home() {
                               Số lượng nhân viên:{" "}
                             </Box>
                             <Box width="10px" />
+
                             <StyleInput
-                              as="input"
                               type="number"
+                              // autoFocus
                               value={totalEmployee.value}
-                              onChange={e =>
+                              onChange={e => {
+                                // console.log(e.target.value);
                                 setTotalEmployee({
                                   ...totalEmployee,
-                                  value: +e.target.value || totalEmployee.value
-                                })
-                              }
+                                  value: +e.target.value
+                                });
+                              }}
+                              onBlur={e => {
+                                e.preventDefault();
+                              }}
                             />
                           </Box>
                           <Box display="flex" alignItems="center">
@@ -263,6 +274,7 @@ export default function Home() {
                               1
                             </Box>
                             <Slider
+                              allowCross={false}
                               value={totalEmployee.value}
                               min={totalEmployee.min}
                               max={totalEmployee.max}
@@ -281,7 +293,7 @@ export default function Home() {
                               }}
                             />
                             <Box className="ml-2" minWidth="100px">
-                              {formatter.format(100000)}
+                              {formatter.format(1000)}
                             </Box>
                           </Box>
                         </Box>
@@ -341,12 +353,15 @@ export default function Home() {
                             </Box>
                           </div>
                         </Box>
-                        <Box display="flex" fontSize={4}>
-                          <label className="d-inline-block">
-                            Tiền công trung bình mỗi giờ:
-                          </label>
-                          <Box width="10px"></Box>
-                          <Box fontWeight="bold">
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          mx="auto"
+                        >
+                          <Box>Tiền công trung bình mỗi giờ:</Box>
+                          <Box width="30px" />
+                          <Box fontWeight="bold" fontSize="larger">
                             {formatter.format(z)} <span>VND/h</span>{" "}
                           </Box>
                         </Box>
@@ -680,7 +695,7 @@ export default function Home() {
                           <Box mt={5}>
                             <Box
                               display="flex"
-                              fontSize={4}
+                              alignItems="flex-start"
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -697,7 +712,7 @@ export default function Home() {
                               <Box width="30px" />
                               <Box
                                 display="flex"
-                                fontSize={5}
+                                fontSize={4}
                                 flex={0.5}
                                 fontWeight="bold"
                               >
@@ -710,7 +725,7 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              fontSize={4}
+                              alignsItems="flex-start"
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -729,7 +744,7 @@ export default function Home() {
                                 flex={0.5}
                                 fontWeight="bold"
                                 display="flex"
-                                fontSize={5}
+                                fontSize={4}
                               >
                                 {formatter.format(caculateChat)}
                                 <Box as="span" ml={1}>
@@ -740,7 +755,7 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              fontSize={4}
+                              alignsItems="flex-start"
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -759,7 +774,7 @@ export default function Home() {
                                 flex={0.5}
                                 fontWeight="bold"
                                 display="flex"
-                                fontSize={5}
+                                fontSize={4}
                               >
                                 {formatter.format(caculateMess)}
                                 <Box as="span" ml={1}>
@@ -770,14 +785,16 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              fontSize={4}
+                              alignsItems="center"
                               flex={1}
                               width={0.8}
                               mx="auto"
                             >
                               <Box
                                 flex={0.5}
-                                display="inline-block"
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
                                 textAlign="right"
                               >
                                 Tổng Chi phí gián đoạn mỗi năm :
@@ -788,7 +805,7 @@ export default function Home() {
                                 fontWeight="bold"
                                 display="flex"
                                 alignItems="flex-start"
-                                fontSize={5}
+                                fontSize={4}
                                 color="#81C136"
                               >
                                 {formatter.format(totalCaculate)}
@@ -814,8 +831,7 @@ export default function Home() {
                             <Box>
                               <Box
                                 display="flex"
-                                alignItem="flex-end"
-                                fontSize={4}
+                                alignItems="flex-end"
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -823,8 +839,9 @@ export default function Home() {
                               >
                                 <Box
                                   flex={0.5}
-                                  display="inline-block"
-                                  textAlign="right"
+                                  display="flex"
+                                  alignItems="center"
+                                  justifyContent="flex-end"
                                 >
                                   Chi phí đầu tư CW:
                                 </Box>
@@ -833,7 +850,7 @@ export default function Home() {
                                   flex={0.5}
                                   fontWeight="bold"
                                   display="flex"
-                                  fontSize={5}
+                                  fontSize={4}
                                 >
                                   {formatter.format(caculateCW)}
                                   <Box as="span" ml={1}>
@@ -843,7 +860,6 @@ export default function Home() {
                               </Box>
                               <Box
                                 display="flex"
-                                fontSize={4}
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -851,8 +867,9 @@ export default function Home() {
                               >
                                 <Box
                                   flex={0.5}
-                                  display="inline-block"
-                                  textAlign="right"
+                                  display="flex"
+                                  alignItems="center"
+                                  justifyContent="flex-end"
                                 >
                                   Chi phí tiết kiệm được :
                                 </Box>
@@ -861,7 +878,7 @@ export default function Home() {
                                   flex={0.5}
                                   fontWeight="bold"
                                   display="flex"
-                                  fontSize={5}
+                                  fontSize={4}
                                 >
                                   {formatter.format(saveMoney)}
                                   <Box as="span" ml={1}>
@@ -871,7 +888,6 @@ export default function Home() {
                               </Box>
                               <Box
                                 display="flex"
-                                fontSize={4}
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -879,8 +895,9 @@ export default function Home() {
                               >
                                 <Box
                                   flex={0.5}
-                                  display="inline-block"
-                                  textAlign="right"
+                                  display="flex"
+                                  alignItems="center"
+                                  justifyContent="flex-end"
                                 >
                                   ROI:
                                 </Box>
@@ -889,7 +906,7 @@ export default function Home() {
                                   fontWeight="bold"
                                   display="flex"
                                   flex={0.5}
-                                  fontSize={5}
+                                  fontSize={4}
                                   color="#81C136"
                                 >
                                   {formatter.format(saveMoney / caculateCW)}
@@ -1125,7 +1142,6 @@ export default function Home() {
                             <Box
                               display="flex"
                               alignItems="flex-end"
-                              fontSize={4}
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -1133,8 +1149,9 @@ export default function Home() {
                             >
                               <Box
                                 flex={0.5}
-                                display="inline-block"
-                                textAlign="right"
+                                display="flex"
+                                alignItems="center"
+                                justifyContent="flex-end"
                               >
                                 Tổng Chi phí họp mỗi năm:
                               </Box>
@@ -1142,7 +1159,7 @@ export default function Home() {
                               <Box
                                 display="flex"
                                 alignItems="flex-end"
-                                fontSize={5}
+                                fontSize={4}
                                 flex={0.5}
                                 fontWeight="bold"
                               >
@@ -1170,7 +1187,6 @@ export default function Home() {
                               <Box
                                 display="flex"
                                 alignItems="flex-end"
-                                fontSize={4}
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -1187,7 +1203,7 @@ export default function Home() {
                                 <Box
                                   display="flex"
                                   alignItems="flex-end"
-                                  fontSize={5}
+                                  fontSize={4}
                                   flex={0.5}
                                   fontWeight="bold"
                                 >
@@ -1201,7 +1217,6 @@ export default function Home() {
                               <Box
                                 display="flex"
                                 alignItems="flex-end"
-                                fontSize={4}
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -1216,11 +1231,11 @@ export default function Home() {
                                 </Box>
                                 <Box width="30px" />
                                 <Box
+                                  as="span"
                                   display="flex"
-                                  fontSize={5}
+                                  fontSize={4}
                                   flex={0.5}
                                   fontWeight="bold"
-                                  color="#81C136"
                                 >
                                   {formatter.format(
                                     totalCaculate * 0.5 - caculateCW
@@ -1234,7 +1249,6 @@ export default function Home() {
                               <Box
                                 display="flex"
                                 alignItems="center"
-                                fontSize={4}
                                 mb={3}
                                 flex={1}
                                 width={0.8}
@@ -1250,7 +1264,7 @@ export default function Home() {
                                 <Box width="30px" />
                                 <Box
                                   display="flex"
-                                  fontSize={5}
+                                  fontSize={4}
                                   flex={0.5}
                                   fontWeight="bold"
                                   color="#81C136"
