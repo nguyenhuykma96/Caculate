@@ -1,19 +1,10 @@
-import React, { useState } from "react";
-import {
-  Accordion,
-  Card,
-  Button,
-  Container,
-  Row,
-  Col,
-  Form
-} from "react-bootstrap";
+import React, { useState, useMemo } from "react";
+import { Accordion, Card, Button, Container, Row, Col } from "react-bootstrap";
 import { ArrowClockwise, Question } from "react-bootstrap-icons";
 import { Box } from "@xstyled/styled-components";
 import themes from "../commons/variables";
-import { CardCustom } from "../components";
+import { CardCustom, Ranger } from "../components";
 import ModalResult from "./ModalResult";
-import Slider from "rc-slider";
 import styled from "styled-components";
 import { formatter } from "../commons/function";
 
@@ -72,28 +63,42 @@ export default function Home() {
     value: 10
   });
 
-  const z = salary.value / 160;
-  const caculateEmail =
-    ((email.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800;
-  const caculateChat =
-    ((b.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800;
-  const caculateMess =
-    ((c.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800;
-  const totalCaculate = caculateEmail + caculateChat + caculateMess;
-  const caculateCW = 50000 * 12 * totalEmployee.value;
+  const z = useMemo(() => salary.value / 160, [salary]);
 
-  const caculateMeeting = a1.value * b1.value * c1.value * z * 48;
-  const saveMoney = caculateMeeting * 0.5 - caculateCW;
+  const caculateEmail = useMemo(
+    () =>
+      ((email.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800,
+    [email.value, d.value, e.value, totalEmployee.value, z]
+  );
 
-  const StyleInput = styled(Form.Control)`
-    max-width: 100px;
-    font-weight: bold;
-    padding: 4px 4px;
-    border: thin solid #e1e1e1;
-    &:focus {
-      outline: none;
-    }
-  `;
+  const caculateChat = useMemo(
+    () => ((b.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800,
+    [b.value, d.value, e.value, totalEmployee.value, z]
+  );
+
+  const caculateMess = useMemo(
+    () => ((c.value * d.value * e.value * totalEmployee.value * z) / 60) * 1800,
+    [c.value, d.value, e.value, totalEmployee.value, z]
+  );
+
+  const totalCaculate = useMemo(
+    () => caculateEmail + caculateChat + caculateMess,
+    [caculateEmail, caculateChat, caculateMess]
+  );
+
+  const caculateCW = useMemo(() => 50000 * 12 * totalEmployee.value, [
+    totalEmployee.value
+  ]);
+
+  const caculateMeeting = useMemo(
+    () => a1.value * b1.value * c1.value * z * 48,
+    [a1.value, b1.value, c1.value, z]
+  );
+
+  const saveMoney = useMemo(() => caculateMeeting * 0.5 - caculateCW, [
+    caculateMeeting,
+    caculateCW
+  ]);
 
   const StyleButtonRestart = styled(Box)`
     position: absolute;
@@ -206,6 +211,122 @@ export default function Home() {
     );
   }
 
+  const handleOnChange = (event, key) => {
+    switch (key) {
+      case "totalEmployee":
+        return setTotalEmployee({
+          ...totalEmployee,
+          value: +event.target.value
+        });
+      case "salary":
+        return setSalary({
+          ...salary,
+          value: +event.target.value
+        });
+      case "email":
+        return setEmail({
+          ...email,
+          value: +event.target.value
+        });
+      case "b":
+        return setB({
+          ...b,
+          value: +event.target.value
+        });
+      case "c":
+        return setC({
+          ...c,
+          value: +event.target.value
+        });
+      case "d":
+        return setD({
+          ...d,
+          value: +event.target.value
+        });
+      case "e":
+        return setE({
+          ...e,
+          value: +event.target.value
+        });
+      case "a1":
+        return setA1({
+          ...a1,
+          value: +event.target.value
+        });
+      case "b1":
+        return setB1({
+          ...b1,
+          value: +event.target.value
+        });
+      case "c1":
+        return setC1({
+          ...c1,
+          value: +event.target.value
+        });
+      default:
+        return;
+    }
+  };
+
+  const handleOnChangeRange = (value, key) => {
+    switch (key) {
+      case "totalEmployee":
+        return setTotalEmployee({
+          ...totalEmployee,
+          value
+        });
+      case "salary":
+        return setSalary({
+          ...salary,
+          value
+        });
+      case "email":
+        return setEmail({
+          ...email,
+          value
+        });
+      case "b":
+        return setB({
+          ...b,
+          value
+        });
+      case "c":
+        return setC({
+          ...c,
+          value
+        });
+      case "d":
+        return setD({
+          ...d,
+          value
+        });
+      case "e":
+        return setE({
+          ...e,
+          value
+        });
+      case "a1":
+        return setA1({
+          ...a1,
+          value
+        });
+      case "b1":
+        return setB1({
+          ...b1,
+          value
+        });
+      case "c1":
+        return setC1({
+          ...c1,
+          value
+        });
+      default:
+        return;
+    }
+  };
+
+  console.log("render");
+
   return (
     <>
       <Container fluid="md">
@@ -242,117 +363,36 @@ export default function Home() {
                         <Box fontSize={5} fontWeight={500} mb={3}>
                           Bảng tính chi phí nhân sự (Employee Cost)
                         </Box>
+                        {/* employees */}
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Số lượng nhân viên:{" "}
-                            </Box>
-                            <Box width="10px" />
-
-                            <StyleInput
-                              type="number"
-                              // autoFocus
-                              value={totalEmployee.value}
-                              onChange={e => {
-                                // console.log(e.target.value);
-                                setTotalEmployee({
-                                  ...totalEmployee,
-                                  value: +e.target.value
-                                });
-                              }}
-                              onBlur={e => {
-                                e.preventDefault();
-                              }}
-                            />
-                          </Box>
-                          <Box display="flex" alignItems="center">
-                            <Box
-                              className="mr-2"
-                              minWidth="100px"
-                              textAlign="right"
-                            >
-                              1
-                            </Box>
-                            <Slider
-                              allowCross={false}
-                              value={totalEmployee.value}
-                              min={totalEmployee.min}
-                              max={totalEmployee.max}
-                              onChange={value =>
-                                setTotalEmployee({ ...totalEmployee, value })
-                              }
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box className="ml-2" minWidth="100px">
-                              {formatter.format(1000)}
-                            </Box>
-                          </Box>
+                          <Ranger
+                            title="Số lượng nhân viên:"
+                            value={totalEmployee.value}
+                            min={totalEmployee.min}
+                            max={totalEmployee.max}
+                            step={1}
+                            onChange={e => handleOnChange(e, "totalEmployee")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "totalEmployee")
+                            }
+                          />
                         </Box>
+                        {/* salary */}
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Mức lương trung bình hằng tháng:
-                            </Box>
-                            <Box width="10px" />
-
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={salary.value}
-                              onChange={e =>
-                                setSalary({
-                                  ...salary,
-                                  value: +e.target.value || salary.value
-                                })
-                              }
-                              maxWidth="120px"
-                            />
-                            <Box as="span" ml={1}>
-                              VND
-                            </Box>
-                          </Box>
-                          <div className="d-flex align-items-center">
-                            <Box
-                              as="span"
-                              className="mr-2"
-                              textAlign="right"
-                              minWidth="100px"
-                            >
-                              {formatter.format(5000000)}
-                            </Box>
-                            <Slider
-                              value={salary.value}
-                              min={salary.min}
-                              max={salary.max}
-                              step={500000}
-                              onChange={value =>
-                                setSalary({ ...salary, value })
-                              }
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box as="span" ml={2} minWidth="100px">
-                              {formatter.format(50000000)}
-                            </Box>
-                          </div>
+                          <Ranger
+                            title="Mức lương trung bình hằng tháng:"
+                            value={salary.value}
+                            min={salary.min}
+                            max={salary.max}
+                            step={500000}
+                            widthInput="120px"
+                            onChange={e => handleOnChange(e, "salary")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "salary")
+                            }
+                          />
                         </Box>
+
                         <Box
                           display="flex"
                           alignItems="center"
@@ -376,7 +416,7 @@ export default function Home() {
                   top={0}
                   left="102%"
                   // width={{ xl: "220px", lg: "210px", md: "200px" }}
-                  width="230px"
+                  width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
@@ -451,247 +491,89 @@ export default function Home() {
                             cần thiết của công ty mỗi năm.
                           </Box>
                         </Box>
+                        {/* email */}
+                        <Box mb={5}>
+                          <Ranger
+                            title="Số lượng trung bình những emails tin tức (news &
+                              admin) gửi cho nhân viên mỗi ngày:"
+                            value={email.value}
+                            min={email.min}
+                            max={email.max}
+                            unit="email"
+                            onChange={e => handleOnChange(e, "email")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "email")
+                            }
+                          />
+                        </Box>
+                        {/* b */}
 
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Số lượng trung bình những emails tin tức (news &
-                              admin) gửi cho nhân viên mỗi ngày:
-                            </Box>
-                            <Box width="10px" />
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={email.value}
-                              onChange={e =>
-                                setEmail({
-                                  ...email,
-                                  value: +e.target.value || email.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box className="d-flex align-items-center">
-                            <Box
-                              className="mr-2"
-                              minWidth="100px"
-                              textAlign="right"
-                            >
-                              1 email
-                            </Box>
-                            <Slider
-                              value={email.value}
-                              min={email.min}
-                              max={email.max}
-                              onChange={value => setEmail({ ...email, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box className="ml-2" minWidth="100px">
-                              500 emails
-                            </Box>
-                          </Box>
+                          <Ranger
+                            title="Số lượt trung bình nhân viên phải lướt group chat
+                              để tìm lại thông tin đã lâu (trôi tin) mỗi ngày:"
+                            value={b.value}
+                            min={b.min}
+                            max={b.max}
+                            unit="lượt"
+                            onChange={e => handleOnChange(e, "b")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "b")
+                            }
+                          />
+                        </Box>
+                        {/* c */}
+
+                        <Box mb={5}>
+                          <Ranger
+                            title={`Số lượt trung bình nhân viên kiểm tra tin nhắn "Đã
+                              xem" được trả lời hay chưa mỗi ngày:`}
+                            value={c.value}
+                            min={c.min}
+                            max={c.max}
+                            unit="lượt"
+                            onChange={e => handleOnChange(e, "c")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "c")
+                            }
+                          />
                         </Box>
 
-                        <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box className="d-inline-block">
-                              Số lượt trung bình nhân viên phải lướt group chat
-                              để tìm lại thông tin đã lâu (trôi tin) mỗi ngày:
-                            </Box>
-                            <Box width="10px"></Box>
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={b.value}
-                              onChange={e =>
-                                setB({
-                                  ...b,
-                                  value: +e.target.value || b.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box className="d-flex align-items-center">
-                            <Box minWidth="100px" textAlign="right" mr={2}>
-                              1 lượt
-                            </Box>
-                            <Slider
-                              value={b.value}
-                              min={b.min}
-                              max={b.max}
-                              onChange={value => setB({ ...b, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box ml={2} minWidth="100px">
-                              200 lượt
-                            </Box>
-                          </Box>
-                        </Box>
+                        {/* d */}
 
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box className="d-inline-block">
-                              Số lượt trung bình nhân viên kiểm tra tin nhắn "Đã
-                              xem" được trả lời hay chưa mỗi ngày:
-                            </Box>
-                            <Box width="10px"></Box>
-
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={c.value}
-                              onChange={e =>
-                                setC({
-                                  ...c,
-                                  value: +e.target.value || c.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box display="flex" alignItems="center">
-                            <Box mr={2} minWidth="100px" textAlign="right">
-                              1 lượt
-                            </Box>
-                            <Slider
-                              value={c.value}
-                              min={c.min}
-                              max={c.max}
-                              onChange={value => setC({ ...c, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box ml={2} minWidth="100px">
-                              500 lượt
-                            </Box>
-                          </Box>
-                        </Box>
-                        <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Thời gian trung bình "khôi phục trạng thái làm
+                          <Ranger
+                            title={`Thời gian trung bình "khôi phục trạng thái làm
                               việc" sau mỗi lần bị gián đoạn bởi emails/ tìm
-                              tin/ check xem đối phương trả lời hay chưa:
-                            </Box>
-                            <Box width="10px" />
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={d.value}
-                              onChange={e =>
-                                setD({
-                                  ...d,
-                                  value: +e.target.value || d.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box display="flex" alignItems="center">
-                            <Box mr={2} minWidth="100px" textAlign="right">
-                              0.5 phút
-                            </Box>
-                            <Slider
-                              value={d.value}
-                              min={d.min}
-                              max={d.max}
-                              step={0.1}
-                              onChange={value => setD({ ...d, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box ml={2} minWidth="100px">
-                              5 phút
-                            </Box>
-                          </Box>
+                              tin/ check xem đối phương trả lời hay chưa:`}
+                            value={d.value}
+                            min={d.min}
+                            max={d.max}
+                            step={0.1}
+                            unit="phút"
+                            onChange={e => handleOnChange(e, "d")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "d")
+                            }
+                          />
                         </Box>
+                        {/* e */}
+
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box className="d-inline-block">
-                              Tỉ lệ % nhân viên bị "phân tâm" bởi những vấn đề
-                              trên:
-                            </Box>
-                            <Box width="10px" />
+                          <Ranger
+                            title={`Tỉ lệ % nhân viên bị "phân tâm" bởi những vấn đề trên:`}
+                            value={e.value}
+                            min={e.min}
+                            max={e.max}
+                            unit="%"
+                            onChange={event => handleOnChange(event, "e")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "e")
+                            }
+                          />
+                        </Box>
 
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={e.value}
-                              onChange={event =>
-                                setE({
-                                  ...e,
-                                  value: +event.target.value || e.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box className="d-flex align-items-center">
-                            <Box
-                              className="mr-2"
-                              minWidth="100px"
-                              textAlign="right"
-                            >
-                              10%
-                            </Box>
-                            <Slider
-                              value={e.value}
-                              min={e.min}
-                              max={e.max}
-                              step={1}
-                              onChange={value => setE({ ...e, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box className="ml-2" minWidth="100px">
-                              100%
-                            </Box>
-                          </Box>
-
+                        <Box mb={5}>
                           <Box mt={5}>
                             <Box
                               display="flex"
@@ -930,7 +812,7 @@ export default function Home() {
                   top={0}
                   left="102%"
                   // width={{ xl: "220px", lg: "210px", md: "200px" }}
-                  width="230px"
+                  width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
@@ -989,152 +871,52 @@ export default function Home() {
                           dụng.
                         </Box>
 
-                        <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Tổng số cuộc họp được tổ chức hằng tuần:{" "}
-                            </Box>
-                            <Box width="10px" />
+                        {/* a1 */}
 
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={a1.value}
-                              onChange={e =>
-                                setA1({
-                                  ...a1,
-                                  value: +e.target.value || a1.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box className="d-flex align-items-center">
-                            <Box
-                              className="mr-2"
-                              minWidth="100px"
-                              textAlign="right"
-                            >
-                              0 cuộc họp
-                            </Box>
-                            <Slider
-                              value={a1.value}
-                              min={a1.min}
-                              max={a1.max}
-                              step={5}
-                              onChange={value => setA1({ ...a1, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box className="ml-2" minWidth="100px">
-                              50 cuộc họp
-                            </Box>
-                          </Box>
+                        <Box mb={5}>
+                          <Ranger
+                            title={"Tổng số cuộc họp được tổ chức hằng tuần:"}
+                            value={a1.value}
+                            min={a1.min}
+                            max={a1.max}
+                            unit="cuộc họp"
+                            onChange={event => handleOnChange(event, "a1")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "a1")
+                            }
+                          />
                         </Box>
 
-                        <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Số giờ họp trung bình (hrs) :
-                            </Box>
-                            <Box width="10px" />
+                        {/* b1 */}
 
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={b1.value}
-                              onChange={e =>
-                                setB1({
-                                  ...b1,
-                                  value: +e.target.value || b1.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box display="flex" alignItems="center">
-                            <Box mr={2} minWidth="100px" textAlign="right">
-                              0.25 giờ
-                            </Box>
-                            <Slider
-                              value={b1.value}
-                              min={b1.min}
-                              max={b1.max}
-                              step={0.1}
-                              onChange={value => setB1({ ...b1, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box ml={2} minWidth="100px">
-                              3 giờ
-                            </Box>
-                          </Box>
+                        <Box mb={5}>
+                          <Ranger
+                            title={"Số giờ họp trung bình (hrs):"}
+                            value={b1.value}
+                            min={b1.min}
+                            max={b1.max}
+                            step={0.25}
+                            unit="giờ"
+                            onChange={event => handleOnChange(event, "b1")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "b1")
+                            }
+                          />
                         </Box>
+                        {/* c1 */}
 
                         <Box mb={5}>
-                          <Box display="flex" alignItems="center" mb={3}>
-                            <Box display="inline-block">
-                              Số nhân viên trung bình mỗi cuộc họp:
-                            </Box>
-                            <Box width="10px" />
-
-                            <StyleInput
-                              as="input"
-                              type="number"
-                              value={c1.value}
-                              onChange={e =>
-                                setC1({
-                                  ...c1,
-                                  value: +e.target.value || c1.value
-                                })
-                              }
-                              maxWidth="75px"
-                            />
-                          </Box>
-                          <Box className="d-flex align-items-center">
-                            <Box
-                              className="mr-2"
-                              minWidth="100px"
-                              textAlign="right"
-                            >
-                              2 nhân viên
-                            </Box>
-                            <Slider
-                              value={c1.value}
-                              min={c1.min}
-                              max={c1.max}
-                              onChange={value => setC1({ ...c1, value })}
-                              handleStyle={{
-                                backgroundColor: themes.colors.orange,
-                                border: 0
-                              }}
-                              trackStyle={{
-                                background: themes.colors.orange
-                              }}
-                              railStyle={{
-                                backgroundColor: themes.colors.border
-                              }}
-                            />
-                            <Box className="ml-2" minWidth="100px">
-                              30 nhân viên
-                            </Box>
-                          </Box>
+                          <Ranger
+                            title={"Số nhân viên trung bình mỗi cuộc họp:"}
+                            value={c1.value}
+                            min={c1.min}
+                            max={c1.max}
+                            unit="nhân viên"
+                            onChange={event => handleOnChange(event, "c1")}
+                            onChangeRange={value =>
+                              handleOnChangeRange(value, "c1")
+                            }
+                          />
                         </Box>
 
                         <Box mb={3}>
@@ -1273,9 +1055,6 @@ export default function Home() {
                                     (totalCaculate * 0.5 - caculateCW) /
                                       caculateCW
                                   )}
-                                  <Box as="span" ml={1}>
-                                    VND
-                                  </Box>
                                 </Box>
                               </Box>
                             </Box>
@@ -1292,7 +1071,7 @@ export default function Home() {
                   top={0}
                   left="102%"
                   // width={{ xl: "220px", lg: "210px", md: "200px" }}
-                  width="230px"
+                  width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
