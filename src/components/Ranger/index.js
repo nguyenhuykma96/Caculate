@@ -54,11 +54,11 @@ const Ranger = React.memo(
     return (
       <>
         <Box display="flex" alignItems="center" mb={3}>
-          <Box display="inline-block">{title}</Box>
-          <Box width="10px" />
+          <Box display="inline-block" px={3} py={0}>{title}</Box>
+          <Box width="20px" />
           <StyleInput
             type="number"
-            value={value}
+            value={value || ""}
             autoFocus={focus}
             onChange={onChange}
             onBlur={e => handleOnBlur(e)}

@@ -18,10 +18,10 @@ const NavbarComponent = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className=" d-block text-center m-auto">
-            <h2>
+            <Box fontSize={6} py={3} fontWeight={500}>
               BẢNG TÍNH CHỈ SỐ RETURN ON INVESTMENT (ROI) <br></br> TRONG GIAO
               TIẾP NỘI BỘ CÔNG TY (INTERNAL COMMUNICATION)
-            </h2>
+            </Box>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

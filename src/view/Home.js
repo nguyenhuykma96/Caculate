@@ -325,8 +325,6 @@ export default function Home() {
     }
   };
 
-  console.log("render");
-
   return (
     <>
       <Container fluid="md">
@@ -607,7 +605,7 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              alignsItems="flex-start"
+                              alignItems="flex-start"
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -637,7 +635,7 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              alignsItems="flex-start"
+                              alignItems="flex-start"
                               mb={3}
                               flex={1}
                               width={0.8}
@@ -667,7 +665,7 @@ export default function Home() {
 
                             <Box
                               display="flex"
-                              alignsItems="center"
+                              alignItems="center"
                               flex={1}
                               width={0.8}
                               mx="auto"
