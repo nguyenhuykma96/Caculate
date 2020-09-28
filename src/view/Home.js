@@ -327,10 +327,10 @@ export default function Home() {
 
   return (
     <>
-      <Container fluid="md">
-        <Row style={{ margin: "0 auto", justifyContent: "center" }}>
+      <Container >
+        <Row style={{ justifyContent: "center" }}>
           {/* Top Button */}
-          <Col xl={10} md={10}>
+          <Col xs={12} md={12} xl={10}>
             <Box
               display="flex"
               fontSize={5}
@@ -350,7 +350,7 @@ export default function Home() {
             </Box>
           </Col>
 
-          <Col xl={10} md={10}>
+          <Col xs={12} md={12} xl={10}>
             <Accordion defaultActiveKey="0">
               <Box position="relative">
                 <CardCustom>
@@ -413,11 +413,11 @@ export default function Home() {
                   position="absolute"
                   top={0}
                   left="102%"
-                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
                   width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
+                  display={openText.isOpen && openText.eventKey === 0 ? 'block' : 'none'}
                   opacity={openText.isOpen && openText.eventKey === 0 ? 1 : 0}
                 >
                   <Box>
@@ -809,11 +809,11 @@ export default function Home() {
                   position="absolute"
                   top={0}
                   left="102%"
-                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
                   width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
+                  display={openText.isOpen && openText.eventKey === 1 ? 'block' : 'none'}
                   opacity={openText.isOpen && openText.eventKey === 1 ? 1 : 0}
                   transition="opacity 0.5s"
                   css={`
@@ -1068,11 +1068,11 @@ export default function Home() {
                   position="absolute"
                   top={0}
                   left="102%"
-                  // width={{ xl: "220px", lg: "210px", md: "200px" }}
                   width="240px"
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
+                  display={openText.isOpen && openText.eventKey === 2 ? 'block' : 'none'}
                   opacity={openText.isOpen && openText.eventKey === 2 ? 1 : 0}
                 >
                   <Box>
@@ -1088,6 +1088,7 @@ export default function Home() {
                 </CardCustom>
               </Box>
             </Accordion>
+
             <Box mt={2} mb={4}>
               <Button
                 block
