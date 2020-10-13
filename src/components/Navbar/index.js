@@ -11,7 +11,7 @@ const NavbarComponent = () => {
             <img
               width="100%"
               alt="logo"
-              src="https://scontent.xx.fbcdn.net/v/t1.15752-9/118940889_322673785481551_4139333777828955343_n.png?_nc_cat=102&_nc_sid=b96e70&_nc_ohc=wuaDnQ5-iQ8AX-8w7zY&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=efdead943fe6619a31cca625d985bdbd&oe=5F7D7C4C"
+              src="/images/logo.png"
             />
           </Box>
         </Navbar.Brand>
