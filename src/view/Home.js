@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
-import { Accordion, Card, Button, Container, Row, Col } from "react-bootstrap";
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { ArrowClockwise, Question } from "react-bootstrap-icons";
+import Collapse, { Panel } from 'rc-collapse';
 import { Box } from "@xstyled/styled-components";
 import themes from "../commons/variables";
 import { CardCustom, Ranger } from "../components";
@@ -8,7 +9,57 @@ import ModalResult from "./ModalResult";
 import styled from "styled-components";
 import { formatter } from "../commons/function";
 
-import { useAccordionToggle } from "react-bootstrap/AccordionToggle";
+
+ const StylePanel = styled(Panel)`
+    margin-bottom: 16px;
+    border-top: none;
+    position: relative;
+    .rc-collapse-header {
+      color: #F37223 !important;
+      font-size: 24px;
+      font-weight: 400;
+      padding: 24px 16px !important;
+      &:focus {
+        outline: none;
+      }
+      .arrow {
+        display: none  !important;
+      }
+    }
+  `;
+  const StyleCollapse = styled(Collapse)`
+    background: none;
+    border: none;
+    .rc-collapse-item {
+      border-top: none;
+      background-color: #FAFAFA;
+      box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    }
+  `;
+    const StyleButtonRestart = styled(Box)`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    svg {
+      font-weight: bold;
+    }
+  `;
+
+  const WrapButtonTop = styled(Box)`
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
+      0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    &:hover {
+      background-color: #e1e1e1;
+      border-color: #e1e1e1;
+      transition: 0.2s linear;
+    }
+  `;
 
 export default function Home() {
   const [openModal, setOpenModal] = useState(false);
@@ -63,6 +114,8 @@ export default function Home() {
     value: 10
   });
 
+  const [activeKey, setActiveKey] = useState(['1','2'])
+
   const z = useMemo(() => salary.value / 160, [salary]);
 
   const caculateEmail = useMemo(
@@ -100,35 +153,7 @@ export default function Home() {
     caculateCW
   ]);
 
-  const StyleButtonRestart = styled(Box)`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    svg {
-      font-weight: bold;
-    }
-  `;
 
-  const WrapButtonTop = styled(Box)`
-    height: 44px;
-    width: 44px;
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16),
-      0 2px 10px 0 rgba(0, 0, 0, 0.12);
-    cursor: pointer;
-    &:hover {
-      background-color: #e1e1e1;
-      border-color: #e1e1e1;
-      transition: 0.2s linear;
-    }
-  `;
-
-  const [openText, setOpenText] = useState({
-    isOpen: true,
-    eventKey: 0
-  });
 
   const handleResetValue = () => {
     setTotalEmployee({
@@ -182,34 +207,6 @@ export default function Home() {
       value: 10
     });
   };
-
-  function CustomToggle({ children, eventKey }) {
-    const decoratedOnClick = useAccordionToggle(eventKey, () => {
-      if (+eventKey === openText.eventKey) {
-        setOpenText({
-          eventKey: +eventKey,
-          isOpen: !openText.isOpen
-        });
-      } else {
-        setOpenText({
-          eventKey: +eventKey,
-          isOpen: true
-        });
-      }
-    });
-
-    return (
-      <Accordion.Toggle
-        as={Card.Header}
-        eventKey={eventKey}
-        onClick={decoratedOnClick}
-      >
-        <Box color={themes.colors.orange} fontSize={5}>
-          {children}
-        </Box>
-      </Accordion.Toggle>
-    );
-  }
 
   const handleOnChange = (event, key) => {
     switch (key) {
@@ -269,6 +266,7 @@ export default function Home() {
   };
 
   const handleOnChangeRange = (value, key) => {
+    console.log(value, key)
     switch (key) {
       case "totalEmployee":
         return setTotalEmployee({
@@ -326,9 +324,9 @@ export default function Home() {
   };
 
   return (
-    <>
+    <Box mt={140} minHeight={"100vh"}>
       <Container >
-        <Row style={{ justifyContent: "center" }}>
+        <Row style={{ justifyContent: 'center' }} >
           {/* Top Button */}
           <Col xs={12} md={12} xl={10}>
             <Box
@@ -351,103 +349,91 @@ export default function Home() {
           </Col>
 
           <Col xs={12} md={12} xl={10}>
-            <Accordion defaultActiveKey="0">
-              <Box position="relative">
-                <CardCustom>
-                  <Card>
-                    <CustomToggle eventKey="0">THÔNG TIN CÔNG TY</CustomToggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Card.Body>
-                        <Box fontSize={5} fontWeight={500} mb={3}>
-                          Bảng tính chi phí nhân sự (Employee Cost)
-                        </Box>
-                        {/* employees */}
-                        <Box mb={5}>
-                          <Ranger
-                            title="Số lượng nhân viên:"
-                            value={totalEmployee.value}
-                            min={totalEmployee.min}
-                            max={totalEmployee.max}
-                            step={1}
-                            onChange={e => handleOnChange(e, "totalEmployee")}
-                            onChangeRange={value =>
-                              handleOnChangeRange(value, "totalEmployee")
-                            }
-                          />
-                        </Box>
-                        {/* salary */}
-                        <Box mb={5}>
-                          <Ranger
-                            title="Mức lương trung bình hằng tháng:"
-                            value={salary.value}
-                            min={salary.min}
-                            max={salary.max}
-                            step={500000}
-                            widthInput="120px"
-                            onChange={e => handleOnChange(e, "salary")}
-                            onChangeRange={value =>
-                              handleOnChangeRange(value, "salary")
-                            }
-                          />
-                        </Box>
-
-                        <Box
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          mx="auto"
-                        >
-                          <Box>Tiền công trung bình mỗi giờ:</Box>
-                          <Box width="30px" />
-                          <Box fontWeight="bold" fontSize="larger">
-                            {formatter.format(z)} <span>VND/h</span>{" "}
-                          </Box>
-                        </Box>
-                      </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </CardCustom>
-
-                <CardCustom
-                  backgroundColor="#FAFAFA"
-                  position="absolute"
-                  top={0}
-                  left="102%"
-                  width="240px"
-                  maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
-                  py={3}
-                  px={2}
-                  display={openText.isOpen && openText.eventKey === 0 ? 'block' : 'none'}
-                  opacity={openText.isOpen && openText.eventKey === 0 ? 1 : 0}
-                >
-                  <Box>
-                    <Box color={themes.colors.orange} fontSize={3}>
-                      Tiền công trung bình mỗi giờ:
-                    </Box>
-                    <Box fontSize={2}>
-                      Dựa trên trung bình mỗi tuần làm việc{" "}
-                      <Box as="span" fontWeight="bold">
-                        40h
-                      </Box>{" "}
-                      và{" "}
-                      <Box as="span" fontWeight="bold">
-                        4
-                      </Box>{" "}
-                      tuần/tháng
-                    </Box>
-                  </Box>
-                </CardCustom>
+           <StyleCollapse
+              onChange={(key) => setActiveKey(key)}
+              activeKey={activeKey}
+            >
+              <StylePanel header={`THÔNG TIN CÔNG TY`} key="1">
+          <Card.Body>
+              <Box fontSize={5} fontWeight={500} mb={3}>
+                Bảng tính chi phí nhân sự (Employee Cost)
+              </Box>
+              {/* employees */}
+              <Box mb={5}>
+                <Ranger
+                  name="employee"
+                  title="Số lượng nhân viên:"
+                  value={totalEmployee.value}
+                  min={totalEmployee.min}
+                  max={totalEmployee.max}
+                  step={1}
+                  onChange={(e) => handleOnChange(e, "totalEmployee")}
+                  onChangeRange={value =>
+                    handleOnChangeRange(value, "totalEmployee")
+                  }
+                />
+              </Box>
+              {/* salary */}
+              <Box mb={5}>
+                <Ranger
+                  title="Mức lương trung bình hằng tháng:"
+                  value={salary.value}
+                  min={salary.min}
+                  max={salary.max}
+                  step={500000}
+                  widthInput="120px"
+                  onChange={e => handleOnChange(e, "salary")}
+                  onChangeRange={(value) =>
+                     handleOnChangeRange(value, "salary")
+                  }
+                />
               </Box>
 
-              <Box position="relative">
-                <CardCustom>
-                  <Card>
-                    <CustomToggle eventKey="1">
-                      CHI PHÍ CHO VẤN ĐỀ NĂNG SUẤT BỊ GIÁN ĐOẠN VÌ GIAO TIẾP
-                    </CustomToggle>
-
-                    <Accordion.Collapse eventKey="1">
-                      <Card.Body>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                mx="auto"
+              >
+                <Box>Tiền công trung bình mỗi giờ:</Box>
+                <Box width="30px" />
+                <Box fontWeight="bold" fontSize="larger">
+                  {formatter.format(z)} <span>VND/h</span>{" "}
+                </Box>
+              </Box>
+            </Card.Body>
+          <CardCustom
+            backgroundColor="#FAFAFA"
+            position="absolute"
+            top={0}
+            left="102%"
+            width="240px"
+            maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
+            py={3}
+            px={2}
+            // display={activeKey.includes("1") ? 'block' : 'none'}
+            opacity={activeKey.includes("1") ? 1 : 0}
+          >
+            <Box>
+              <Box color={themes.colors.orange} fontSize={3}>
+                Tiền công trung bình mỗi giờ:
+              </Box>
+              <Box fontSize={2}>
+                Dựa trên trung bình mỗi tuần làm việc{" "}
+                <Box as="span" fontWeight="bold">
+                  40h
+                </Box>{" "}
+                và{" "}
+                <Box as="span" fontWeight="bold">
+                  4
+                </Box>{" "}
+                tuần/tháng
+              </Box>
+            </Box>
+          </CardCustom>
+      </StylePanel>
+             <StylePanel header={`CHI PHÍ CHO VẤN ĐỀ NĂNG SUẤT BỊ GIÁN ĐOẠN VÌ GIAO TIẾP`} key="2">
+         <Card.Body>
                         <Box fontSize={5} fontWeight={500} mb={3}>
                           THÔNG TIN CÔNG TY
                         </Box>
@@ -800,67 +786,56 @@ export default function Home() {
                           </Box>
                         </Box>
                       </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </CardCustom>
-
-                <CardCustom
-                  backgroundColor="#FAFAFA"
-                  position="absolute"
-                  top={0}
-                  left="102%"
-                  width="240px"
-                  maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
-                  py={3}
-                  px={2}
-                  display={openText.isOpen && openText.eventKey === 1 ? 'block' : 'none'}
-                  opacity={openText.isOpen && openText.eventKey === 1 ? 1 : 0}
-                  transition="opacity 0.5s"
-                  css={`
-                    transition-delay: 1s;
-                  `}
-                >
-                  <Box>
-                    <Box fontSize={2}>
-                      <Box>
-                        <Box as="span" fontWeight="bold">
-                          Thời gian khôi phục "gián đoạn":
-                        </Box>
-                        Nghiên cứu cho thấy rằng nhân viên sẽ mất trung bình 64
-                        giây để trở lại làm việc bình thường như trước khi họ bị
-                        gián đoạn bởi notification hay email.
-                      </Box>
-                      <Box>
-                        <Box as="span" fontWeight="bold">
-                          Tỷ lệ phân tâm:
-                        </Box>
-                        Nghiên cứu cho thấy rằng 70% nhân viên sẽ xem/phản hồi
-                        các tin nhắn trong trung bình 64 giây cho dù chúng có
-                        quan trọng hay không. Họ bị phân tâm khỏi việc mình đang
-                        làm.
-                      </Box>
-                      <Box>
-                        <Box as="span" fontWeight="bold">
-                          Tổng chi phí gián đoạn mỗi năm:
-                        </Box>
-                        Đây là chi phí mà những tác nhân gián đoạn gây ra như
-                        kiểm tra emails, lướt group chat tìm tin, kiểm tra tin
-                        nhắn để phản hồi
-                      </Box>
-                    </Box>
-                  </Box>
-                </CardCustom>
+      
+         <CardCustom
+          backgroundColor="#FAFAFA"
+          position="absolute"
+          top={0}
+          left="102%"
+          width="240px"
+          maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
+          py={3}
+          px={2}
+          // display={activeKey.includes("2") ? 'block' : 'none'}
+          opacity={activeKey.includes("2") ? 1 : 0}
+          transition="opacity 0.5s"
+          css={`
+            transition-delay: 1s;
+          `}
+        >
+          <Box>
+            <Box fontSize={2}>
+              <Box>
+                <Box as="span" fontWeight="bold">
+                  Thời gian khôi phục "gián đoạn":
+                </Box>
+                Nghiên cứu cho thấy rằng nhân viên sẽ mất trung bình 64
+                giây để trở lại làm việc bình thường như trước khi họ bị
+                gián đoạn bởi notification hay email.
               </Box>
-
-              <Box position="relative">
-                <CardCustom>
-                  <Card>
-                    <CustomToggle eventKey="2">
-                      CHI PHÍ CHO VẤN ĐỀ TỔ CHỨC HỌP KHÔNG HIỆU QUẢ
-                    </CustomToggle>
-
-                    <Accordion.Collapse eventKey="2">
-                      <Card.Body>
+              <Box>
+                <Box as="span" fontWeight="bold">
+                  Tỷ lệ phân tâm:
+                </Box>
+                Nghiên cứu cho thấy rằng 70% nhân viên sẽ xem/phản hồi
+                các tin nhắn trong trung bình 64 giây cho dù chúng có
+                quan trọng hay không. Họ bị phân tâm khỏi việc mình đang
+                làm.
+              </Box>
+              <Box>
+                <Box as="span" fontWeight="bold">
+                  Tổng chi phí gián đoạn mỗi năm:
+                </Box>
+                Đây là chi phí mà những tác nhân gián đoạn gây ra như
+                kiểm tra emails, lướt group chat tìm tin, kiểm tra tin
+                nhắn để phản hồi
+              </Box>
+            </Box>
+          </Box>
+        </CardCustom>
+      </StylePanel>
+      <StylePanel header={`CHI PHÍ CHO VẤN ĐỀ TỔ CHỨC HỌP KHÔNG HIỆU QUẢ`} key="3">
+        <Card.Body>
                         <Box mb={3}>
                           Nhiều tổ chức đang gặp vấn đề lãng phí quá nhiều thời
                           gian cho các cuộc họp cập nhật chung. Đây là một chi
@@ -1059,11 +1034,8 @@ export default function Home() {
                           </Box>
                         </Box>
                       </Card.Body>
-                    </Accordion.Collapse>
-                  </Card>
-                </CardCustom>
-
-                <CardCustom
+      
+       <CardCustom
                   backgroundColor="#FAFAFA"
                   position="absolute"
                   top={0}
@@ -1072,8 +1044,8 @@ export default function Home() {
                   maxWidth={{ xl: "25%", lg: "100%", md: "100%" }}
                   py={3}
                   px={2}
-                  display={openText.isOpen && openText.eventKey === 2 ? 'block' : 'none'}
-                  opacity={openText.isOpen && openText.eventKey === 2 ? 1 : 0}
+                  // display={activeKey.includes("3") ? 'block' : 'none'}
+                  opacity={activeKey.includes("3") ? 1 : 0}
                 >
                   <Box>
                     <Box color={themes.colors.orange} fontSize={3}>
@@ -1086,8 +1058,13 @@ export default function Home() {
                     </Box>
                   </Box>
                 </CardCustom>
-              </Box>
-            </Accordion>
+      </StylePanel>
+  
+        
+            
+            </StyleCollapse>
+            
+   
 
             <Box mt={2} mb={4}>
               <Button
@@ -1106,6 +1083,6 @@ export default function Home() {
         </Row>
       </Container>
       <ModalResult showModal={openModal} onHide={() => setOpenModal(false)} />
-    </>
+    </Box>
   );
 }

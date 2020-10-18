@@ -1,11 +1,19 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import { Box } from "@xstyled/styled-components";
+import styled from 'styled-components';
+
+const StyleHeader = styled(Navbar)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+`;
 
 const NavbarComponent = () => {
   return (
-    // <Box mb={1}>
-      <Navbar bg="light" expand="lg">
+      <StyleHeader bg="light" expand="lg">
         <Navbar.Brand href="/">
           <Box height="100px" width="100px">
             <img
@@ -24,8 +32,7 @@ const NavbarComponent = () => {
             </Box>
           </Nav>
         </Navbar.Collapse>
-      </Navbar>
-    // </Box>
+      </StyleHeader>
   );
 };
 

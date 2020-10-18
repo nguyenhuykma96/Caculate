@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "@xstyled/styled-components": "^1.18.1",
     "bootstrap": "^4.5.2",
+    "rc-collapse": "^2.0.1",
     "rc-slider": "^9.3.1",
     "react": "^16.13.1",
     "react-animations": "^1.0.0",
